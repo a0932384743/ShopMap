@@ -1,19 +1,26 @@
-name: Build and Deploy
-on: [push]
+name: Deployment
+on:
+  push:
+    branches:
+      - master
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
-
-      - name: Install and Build 🔧 
-        run: |
-          npm install
-          npm run build
-
-      - name: Deploy 🚀
-        uses: a0932384743/ShopMap@v1.0.0
-        with:
-          branch: main
-          folder: dist
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install Packages
+      run: npm install
+    - name: Build page
+      run: npm run build
+    - name: Deploy to gh-pages
+      uses: a0932384743/ShopMap@v1
+      with:
+        deploy_key: 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
+        publish_dir: ./dist
