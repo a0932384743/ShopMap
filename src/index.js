@@ -46,9 +46,6 @@ window.addEventListener('load', async () => {
     const center = [24, 120];
     const zoom = 10; // 0 - 18
 
-    const res = get('https://ws.yunlin.gov.tw/001/Upload/539/opendata/15369/792/3a610b9f-12e0-4e7f-b9e9-7c14577999da.json');
-    console.log(res);
-
     const baselayers = {
         'OpenStreetMap': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
         'Google.Street': L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
