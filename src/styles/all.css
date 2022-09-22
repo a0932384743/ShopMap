@@ -1,0 +1,14 @@
+#Map {
+    height: 70vh;
+    min-height: 400px;
+    width: 100%;
+}
+
+.leaflet-popup-content {
+    margin: 25px 0px 10px 0px !important;
+    min-width: 200px;
+}
+
+a.leaflet-popup-close-button {
+    background: white !important;
+}
