@@ -1,12 +1,14 @@
 import axios from 'axios';
+
 axios.defaults.timeout = 18000;
 axios.interceptors.request.use(config => {
     config.data = JSON.stringify(config.data);
     config.headers = {
-        'Access-Control-Allow-Origin': 'gis.taiwan.net.tw',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
         'Access-Control-Max-Age': '86400',
-        'Content-Type':'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json; odata=verbose'
     };
 
     return config;
@@ -51,6 +53,23 @@ export function get (url, params = {}) {
             });
     });
 }
+
+export function getJSON (url, params = {}) {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(url, {
+                params: params,
+                responseType: 'json'
+            })
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
+}
+
 
 export function post (url, data = {}) {
     return new Promise((resolve, reject) => {

@@ -6,13 +6,11 @@ import './js/images';
 import * as L from 'leaflet';
 import * as PIXI from 'pixi.js';
 import 'leaflet-pixi-overlay';
-import { get } from './js/service';
-import data from './assets/json/data.json';
 
 const genPopContent = function(s){
 
     return `<div style="width: 100%;height: 100px;background: white">
-          <img src="${s.Picture1}" alt="Picture1" width="100%" height="100" style="object-fit: cover">
+          <img src="${s.Picture}" alt="Picture1" width="100%" height="100" style="object-fit: cover">
       </div>
       <div class="card border-0">
         <div class="card-header h5 fw-bolder">
@@ -41,6 +39,9 @@ const genPopContent = function(s){
       </div>`;
 };
 
+function getRandom(min, max) {
+    return min + Math.random() * (max - min);
+}
 
 window.addEventListener('load', async () => {
     const center = [24, 120];
@@ -77,25 +78,39 @@ window.addEventListener('load', async () => {
     loader.add('marker', 'assets/icons/store-svgrepo-com.svg');
     loader.load((loader, resources) => {
         const texture = resources.marker.texture;
-        const stores = data.Info;
+
         const pixiLayer = (()=> {
             let frame = null;
             let firstDraw = true;
             let prevZoom;
+            const stores = [];
+            for (let i = 0; i < 100000; i++) {
+                stores.push({
+                    'Id': 'C1_313020000G_000026',
+                    'Name': '宏亞食品巧克力觀光工廠',
+                    'Description': '巧克力共和國是一座以巧克力為主題的觀光工廠，建築設計、館內主題設計皆以巧克力為主題，這裡也提供豐富的巧克力相關知識，亦可以DIY創作巧克力，為一寓教於樂、適合親子休閒娛樂的絕佳去處。',
+                    'Tel': '886-3-3656555',
+                    'Add': '桃園縣八德市建國路386號',
+                    'Opentime': '每天早上8:00 - 14:00',
+                    'Picture': 'https://www.eastcoast-nsa.gov.tw/image/28701/640x480',
+                    Py: getRandom(100, -100),
+                    Px: getRandom(200, -200)
+                });
+            }
 
             const markers = [...stores].map(s=>{
                 const marker = new PIXI.Sprite(texture);
                 marker.popup = L.popup()
                     .setLatLng([s.Py , s.Px])
                     .setContent(genPopContent(s));
-                
+
                 marker.interactive = true;
                 marker.Py = s.Py;
                 marker.Px = s.Px;
                 return marker;
             });
 
-       
+
 
             const pixiContainer = new PIXI.Container();
             pixiContainer.addChild(...markers);
@@ -126,13 +141,18 @@ window.addEventListener('load', async () => {
                             target.popup.openOn(map);
                         }
                     });
-                    
+
                     markers.forEach(marker=>{
                         const markerCoords = project([marker.Py , marker.Px]);
                         marker.x = markerCoords.x;
                         marker.y = markerCoords.y;
-                        marker.anchor.set(0.1, 0.1);
-                        marker.scale.set(0.2 / scale);
+                        marker.anchor.set(0.01, 0.01);
+                        if( (0.1/scale) < 0.5){
+                            marker.scale.set(0.1/scale);
+                        }else{
+                            marker.scale.set(0.5);
+
+                        }
                     });
 
                 }
@@ -145,7 +165,12 @@ window.addEventListener('load', async () => {
                     progress = timestamp - start;
 
                     markers.forEach(marker=>{
-                        marker.scale.set(0.2 / scale);
+                        if( (0.1/scale) < 0.5){
+                            marker.scale.set(0.1/scale);
+                        }else{
+                            marker.scale.set(0.5);
+
+                        }
                     });
 
                     renderer.render(container);
