@@ -44,5 +44,5 @@ jobs:
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.MySecret  }}
+          github_token: ${{ secrets.APIKEY  }}
           publish_dir: ./dist
