@@ -1,26 +1,42 @@
-name: Deployment
+name: deploy gh-pages
 on:
   push:
     branches:
       - master
 jobs:
-  deploy:
+  build:
+    name: Build and deploy gh-pages
+    env:
+      MY_SECRET   : ${{secrets.commit_secret}}
+      USER_NAME   : a0932484743
+      USER_EMAIL  : a0932484743@gmail.com
+      PUBLISH_DIR : ./dist
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install Packages
-        run: npm install
-      - name: Build page
-        run: npm run build
-      - name: Deploy to gh-pages
-        uses: a0932384743/ShopMap@v1
-        with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./dist
+      - name: npm install
+        run: |
+          npm install
+      - name: npm run build
+        run: |
+          npm run build
+      - name: Commit files
+        run: |
+          cd $PUBLISH_DIR
+          git init
+          git config --local user.name $USER_NAME
+          git config --local user.email $USER_EMAIL
+          git status
+          git remote add origin https://$MY_SECRET@github.com/$GITHUB_REPOSITORY.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "deploy to Github pages"
+          git push origin gh-pages -f
+          echo 🤘 deploy gh-pages complete.
