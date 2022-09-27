@@ -30,10 +30,7 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
+      - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -43,7 +40,7 @@ jobs:
       - name: Build page
         run: npm run build
       - name: Deploy to gh-pages
-        uses: a0932384743/ShopMap@v1.0.1
+        uses: a0932384743/ShopMap@v1
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_dir: ./dist
