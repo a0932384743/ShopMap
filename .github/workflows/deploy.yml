@@ -12,12 +12,22 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Install Packages
-      run: npm install
-    - name: Build page
-      run: npm run build
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install and Build
+      run: |
+        yarn install
+        yarn build
     - name: Deploy to gh-pages
       uses: a0932384743/ShopMap@v1
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_dir: ./dist
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4.2.2
+      with:
+        branch: gh-pages
+        folder: dist
+
