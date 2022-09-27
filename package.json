@@ -4,6 +4,7 @@
   "description": "This project is testing over 10,000 points on map.",
   "private": true,
   "scripts": {
+    "deploy": "gh-pages -d dist",
     "build": "webpack --config webpack.config.js",
     "start": "webpack serve --config webpack.config.js",
     "start:dist": "http-server dist --port 8080"
@@ -25,6 +26,7 @@
     "cypress": "^9.5.2",
     "eslint": "^8.22.0",
     "file-loader": "^6.2.0",
+    "gh-pages": "^4.0.0",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.5.0",
     "http-server": "^14.1.0",

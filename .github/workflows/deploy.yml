@@ -1,4 +1,4 @@
-name: Deployment
+name: Deployment gh-pages
 on:
   push:
     branches:
@@ -22,5 +22,5 @@ jobs:
     - name: Deploy to gh-pages
       uses: a0932384743/ShopMap@v1
       with:
-        deploy_key: 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
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_dir: ./dist
